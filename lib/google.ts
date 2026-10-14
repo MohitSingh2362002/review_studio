@@ -1,0 +1,21 @@
+import {database} from './database';
+function getEnv(): Record<string, string | undefined> {
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env;
+  }
+  return (globalThis as any).env || {};
+}
+export function googleConfig(){const e=getEnv();return {clientId:e.GOOGLE_CLIENT_ID,clientSecret:e.GOOGLE_CLIENT_SECRET,key:e.GOOGLE_TOKEN_ENCRYPTION_KEY,origin:e.SITE_ORIGIN||'https://do-nothing-review-studio.shivamm0003.chatgpt.site'};}
+
+export function googleReady(){const c=googleConfig();return !!(c.clientId&&c.clientSecret&&c.key);}
+export function b64(bytes:Uint8Array){return btoa(String.fromCharCode(...bytes)).replaceAll('+','-').replaceAll('/','_').replaceAll('=','');}
+function decode(s:string){return Uint8Array.from(atob(s.replaceAll('-','+').replaceAll('_','/')),c=>c.charCodeAt(0));}
+async function encryptionKey(){const secret=googleConfig().key;if(!secret)throw Error('Google connection needs administrator setup.');const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(secret));return crypto.subtle.importKey('raw',hash,'AES-GCM',false,['encrypt','decrypt']);}
+export async function seal(value:any,owner:string){const iv=crypto.getRandomValues(new Uint8Array(12));const data=await crypto.subtle.encrypt({name:'AES-GCM',iv,additionalData:new TextEncoder().encode(owner)},await encryptionKey(),new TextEncoder().encode(JSON.stringify(value)));return b64(iv)+'.'+b64(new Uint8Array(data));}
+export async function unseal(value:string,owner:string){const [iv,data]=value.split('.');const decoded=await crypto.subtle.decrypt({name:'AES-GCM',iv:decode(iv),additionalData:new TextEncoder().encode(owner)},await encryptionKey(),decode(data));return JSON.parse(new TextDecoder().decode(decoded));}
+export async function saveTokens(owner:string,tokens:any){await database().prepare('INSERT INTO google_connections(owner,credentials,updated) VALUES (?,?,?) ON CONFLICT(owner) DO UPDATE SET credentials=excluded.credentials,updated=excluded.updated').bind(owner,await seal(tokens,owner),new Date().toISOString()).run();}
+export async function googleToken(owner:string){const row=await database().prepare('SELECT credentials FROM google_connections WHERE owner=?').bind(owner).first<{credentials:string}>();if(!row)throw Error('Connect your Google account first.');const t=await unseal(row.credentials,owner);if(t.expires>Date.now()+60000)return t.access_token;if(!t.refresh_token)throw Error('Your Google connection expired. Please reconnect.');const c=googleConfig();const r=await fetch('https://oauth2.googleapis.com/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_id:c.clientId||'',client_secret:c.clientSecret||'',refresh_token:t.refresh_token,grant_type:'refresh_token'}),signal:AbortSignal.timeout(15000)});if(!r.ok)throw Error('Your Google connection expired or was revoked. Please reconnect.');const n:any=await r.json();if(!n.access_token)throw Error('Google did not provide an access token.');const updated={...t,...n,expires:Date.now()+Number(n.expires_in||3600)*1000};await saveTokens(owner,updated);return updated.access_token;}
+export async function googleGet(token:string,url:string){const u=new URL(url);if(!['mybusinessaccountmanagement.googleapis.com','mybusinessbusinessinformation.googleapis.com','mybusiness.googleapis.com'].includes(u.hostname)||u.protocol!=='https:')throw Error('Unsupported Google endpoint.');const r=await fetch(url,{headers:{Authorization:`Bearer ${token}`},signal:AbortSignal.timeout(20000)});if(!r.ok){if(r.status===403)throw Error('Google denied access. Check Business Profile API approval and the connected account’s permissions.');if(r.status===401)throw Error('Your Google connection needs to be renewed.');if(r.status===429)throw Error('Google’s request limit was reached. Please try again shortly.');throw Error(`Google could not return this information (${r.status}).`);}return r.json() as Promise<any>;}
+export const validAccount=(s:string)=>/^accounts\/[\w-]+$/.test(s);
+export const validLocation=(s:string)=>/^locations\/[\w-]+$/.test(s);
+export const locationMask='name,title,storefrontAddress,phoneNumbers,websiteUri,profile,categories,metadata,serviceItems';

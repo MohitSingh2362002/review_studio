@@ -1,0 +1,5 @@
+Do Nothing Review Studio - published version 6
+Source commit: c669df1dcf76f5afa7c2d89a6d72963d8bcaa3d3
+Includes the latest Figma redesign.
+Start with README.md and .env.example.
+Dependencies, build cache, credentials, uploads and customer data are not included.

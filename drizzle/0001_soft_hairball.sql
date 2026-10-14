@@ -1,0 +1,1 @@
+ALTER TABLE `clients` ADD `keywords` text DEFAULT '' NOT NULL;

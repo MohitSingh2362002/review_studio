@@ -1,0 +1,112 @@
+/* Four-color palette from the supplied card design. */
+:root {
+  --mint: #0da849;
+  --mint-ink: #087b35;
+  --mint-surface: #e5f7eb;
+  --mint-border: #b9e8c8;
+  --mint-glow: #ccebd7;
+  --violet: #7c3af8;
+  --violet-ink: #6930d7;
+  --violet-surface: #f0e9fc;
+  --violet-border: #ddcbff;
+  --violet-glow: #e3d7f8;
+  --sky: #228fff;
+  --sky-ink: #086ac3;
+  --sky-surface: #e2f0ff;
+  --sky-border: #b4d9ff;
+  --sky-glow: #cce5ff;
+  --coral: #eb2429;
+  --coral-ink: #cb2028;
+  --coral-surface: #fce6e4;
+  --coral-border: #ffbcb6;
+  --coral-glow: #f8d1cf;
+}
+.overview-cards article:nth-child(1), .nav-item:nth-child(1), .standee-card:nth-child(1),
+.profile-stats>div:nth-child(1), .login-feature:nth-of-type(1) {
+  --tone: var(--mint); --tone-ink: var(--mint-ink); --tone-surface: var(--mint-surface); --tone-border: var(--mint-border); --tone-glow: var(--mint-glow);
+}
+.overview-cards article:nth-child(2), .nav-item:nth-child(2), .standee-card:nth-child(2),
+.profile-stats>div:nth-child(2), .login-feature:nth-of-type(2), .google-connect-card {
+  --tone: var(--violet); --tone-ink: var(--violet-ink); --tone-surface: var(--violet-surface); --tone-border: var(--violet-border); --tone-glow: var(--violet-glow);
+}
+.overview-cards article:nth-child(3), .nav-item:nth-child(3), .standee-card:nth-child(3),
+.profile-stats>div:nth-child(3), .login-feature:nth-of-type(3) {
+  --tone: var(--sky); --tone-ink: var(--sky-ink); --tone-surface: var(--sky-surface); --tone-border: var(--sky-border); --tone-glow: var(--sky-glow);
+}
+.overview-cards article:nth-child(4), .nav-item:nth-child(4), .account-card {
+  --tone: var(--coral); --tone-ink: var(--coral-ink); --tone-surface: var(--coral-surface); --tone-border: var(--coral-border); --tone-glow: var(--coral-glow);
+}
+.portal-v3 .overview-cards { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.overview-cards article, .overview-cards article.yellow-card,
+.profile-stats>div, .google-connect-card, .account-card {
+  background: radial-gradient(ellipse at 100% 0%, var(--tone-glow) 0, transparent 58%), linear-gradient(135deg, #ffffffb8, transparent), var(--tone-surface);
+  border: 1px solid var(--tone-border);
+  border-radius: 20px;
+}
+.overview-cards article { padding: 25px 22px; }
+.overview-cards article>span, .overview-cards article.yellow-card>span { display: block; color: #263343; font-size: 13px; padding-right: 26px; min-height: 32px; }
+.overview-cards article>svg, .overview-cards article:nth-child(2)>svg, .overview-cards article.yellow-card>svg { color: var(--tone); top: 25px; right: 20px; }
+.overview-cards strong { color: #162333; font-size: 42px; margin: 8px 0 16px; }
+.overview-cards small, .yellow-card button { font-size: 12px; line-height: 1.5; }
+.overview-cards small { display: block; color: #516174; border-top: 1px solid var(--tone-border); padding-top: 13px; }
+.yellow-card button { color: var(--tone-ink); border: 0; border-top: 1px solid var(--tone-border); width: 100%; text-align: left; padding-top: 13px; }
+.yellow-card button:hover { text-decoration: underline; }
+.portal-sidebar { background: #fafbfe; border-right: 1px solid #e8eaf0; }
+.portal-sidebar nav .nav-item>svg { color: var(--tone); }
+.portal-sidebar nav .nav-item.selected { background: var(--tone-surface); color: var(--tone-ink); box-shadow: inset 0 0 0 1px var(--tone-border); }
+.portal-sidebar nav .nav-item:hover:not(.selected) { background: var(--tone-surface); color: var(--tone-ink); }
+.portal-sidebar nav .nav-item>span:last-child:not(:first-child) { background: #ffffffc9; color: var(--tone-ink); }
+.sidebar-note { background: linear-gradient(135deg, #f4edff, #e8f2ff); border: 1px solid var(--violet-border); border-radius: 20px; }
+.sidebar-note>svg { color: var(--violet); }
+.header-account .avatar { background: var(--coral-surface); color: var(--coral-ink); }
+.portal-v3 .directory { border: 1px solid #e5e9ef; }
+.portal-v3 .directory-title h2>span { background: var(--violet-surface); color: var(--violet-ink); }
+.portal-v3 tbody tr:nth-child(4n+1) .business-avatar { background: var(--mint-surface); color: var(--mint-ink); }
+.portal-v3 tbody tr:nth-child(4n+2) .business-avatar { background: var(--violet-surface); color: var(--violet-ink); }
+.portal-v3 tbody tr:nth-child(4n+3) .business-avatar { background: var(--sky-surface); color: var(--sky-ink); }
+.portal-v3 tbody tr:nth-child(4n+4) .business-avatar { background: var(--coral-surface); color: var(--coral-ink); }
+.badge.active, .portal-v3 .badge.active { background: var(--mint-surface); color: var(--mint-ink); }
+.badge.paused, .portal-v3 .badge.paused { background: var(--coral-surface); color: var(--coral-ink); }
+.google-letter { background: #ffffffd9; color: #202124; border: 1px solid var(--violet-border); }
+.google-connect-card .badge { background: #ffffffd9; color: var(--violet-ink); }
+.connection-panel .setup-card { border-color: var(--violet-border); }
+.connection-panel .setup-card>svg, .connection-panel .text-btn { color: var(--violet-ink); }
+.connection-panel .btn:not(.secondary) { background: var(--violet-ink); }
+.connection-panel .btn:not(.secondary):hover { background: #5623b8; }
+.profile-stats strong { color: #1f2937; }
+.profile-stats small { color: #516174; }
+.account-avatar { color: var(--coral-ink); background: #ffffffdb; border: 1px solid var(--coral-border); }
+.account-card .form-grid input { background: #ffffffed; }
+.account-card .btn { background: var(--coral-ink); }
+.account-card .btn:hover { background: #ab1820; }
+.account-security { border-color: var(--coral-border); }
+.account-security>svg, .account-security .text-btn { color: var(--coral-ink); }
+.profile-review-link { background: var(--sky-surface); border: 1px solid var(--sky-border); }
+.keyword-preview span { background: var(--violet-surface); color: var(--violet-ink); border: 1px solid var(--violet-border); border-radius: 20px; }
+.services-tags span { background: var(--mint-surface); color: var(--mint-ink); border-color: var(--mint-border); }
+.standee-card { background: linear-gradient(155deg, #fff, var(--tone-surface)); border-color: var(--tone-border); border-radius: 20px; }
+.standee-preview { background: radial-gradient(at top right, var(--tone-glow), transparent 70%), var(--tone-surface); }
+.standee-card .btn.secondary { color: var(--tone-ink); border-color: var(--tone-border); background: #ffffffb8; }
+.standee-card .btn.secondary:hover { background: var(--tone-surface); border-color: var(--tone); }
+.login-story { background: radial-gradient(at 100% 0%, #e1d4ff, transparent 48%), radial-gradient(at 0% 100%, #cfeeda, transparent 50%), linear-gradient(135deg, #e9f4ff, #fce6e4); }
+.login-feature { padding: 12px 16px; background: #ffffffc7; border: 1px solid var(--tone-border); border-radius: 16px; }
+.login-feature svg { color: var(--tone-ink); }
+.login-lock { background: var(--coral-surface); color: var(--coral-ink); }
+.review-steps li:nth-child(1).current>span { background: var(--mint-ink); }
+.review-steps li:nth-child(2).current>span { background: var(--violet-ink); }
+.review-steps li:nth-child(3).current>span { background: var(--sky-ink); }
+.service-option.is-selected { background: var(--mint-surface); color: var(--mint-ink); border-color: var(--mint)!important; }
+.form-grid .feeling-option.is-selected { background: var(--violet-surface); color: var(--violet-ink); border-color: var(--violet); }
+.feeling-option.is-selected .feeling-number, .feeling-option.is-selected .feeling-number svg { color: var(--violet-ink); }
+.suggestion-card.is-selected { background: var(--sky-surface); border-color: var(--sky-ink); box-shadow: 0 0 0 1px var(--sky-ink); }
+@media(max-width:1250px) {
+  .portal-v3 .overview-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media(max-width:600px) {
+  .portal-v3 .overview-cards { gap: 12px; }
+  .overview-cards article { padding: 19px 16px; }
+  .overview-cards article:last-child { grid-column: auto; }
+  .overview-cards article>span, .overview-cards article.yellow-card>span { padding-right: 0; min-height: 34px; font-size: 12px; }
+  .overview-cards strong { font-size: 34px; }
+  .overview-cards small, .yellow-card button { font-size: 11px; }
+}

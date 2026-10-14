@@ -1,0 +1,2 @@
+import {getChatGPTUser} from '@/app/chatgpt-auth';import {database} from '@/lib/database';
+export async function POST(req:Request){const u=await getChatGPTUser();if(!u)return Response.json({error:'Please sign in.'},{status:401});if(req.headers.get('origin')!==new URL(req.url).origin)return Response.json({error:'Invalid origin.'},{status:403});await database().prepare('DELETE FROM google_connections WHERE owner=?').bind(u.userId).run();return Response.json({ok:true});}

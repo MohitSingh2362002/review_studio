@@ -1,0 +1,10 @@
+import { sqliteTable, text, integer, index, uniqueIndex } from 'drizzle-orm/sqlite-core';
+export const clients=sqliteTable('clients',{
+ id:text('id').primaryKey(), owner:text('owner').notNull(), name:text('name').notNull(), niche:text('niche').notNull(), city:text('city').notNull().default(''), url:text('url').notNull(), services:text('services').notNull().default(''), keywords:text('keywords').notNull().default(''), description:text('description').notNull().default(''), address:text('address').notNull().default(''), phone:text('phone').notNull().default(''), whatsapp:text('whatsapp').notNull().default(''), website:text('website').notNull().default(''), image:text('image').notNull().default(''), googleAccount:text('google_account'), googleLocation:text('google_location'), syncedAt:text('synced_at'), reviewData:text('review_data').notNull().default('{}'), syncWarnings:text('sync_warnings').notNull().default('[]'), active:integer('active').notNull().default(1), created:text('created').notNull(),
+},t=>[index('idx_clients_owner').on(t.owner),uniqueIndex('idx_clients_google_owner').on(t.owner,t.googleLocation)]);
+export const limits=sqliteTable('draft_limits',{id:text('id').primaryKey(),count:integer('count').notNull().default(0)});
+
+export const googleConnections=sqliteTable('google_connections',{owner:text('owner').primaryKey(),credentials:text('credentials').notNull(),updated:text('updated').notNull()});
+export const googleStates=sqliteTable('google_states',{state:text('state').primaryKey(),owner:text('owner').notNull(),verifier:text('verifier').notNull(),expires:integer('expires').notNull()});
+export const userProfiles=sqliteTable('user_profiles',{owner:text('owner').primaryKey(),displayName:text('display_name').notNull().default(''),agency:text('agency').notNull().default(''),phone:text('phone').notNull().default('')});
+export const uploads=sqliteTable('uploads',{id:text('id').primaryKey(),owner:text('owner').notNull(),mime:text('mime').notNull(),created:text('created').notNull()});
